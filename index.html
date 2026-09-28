@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Institucional de Sedes</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f6f8;color:#263238}
+  header{background:#263c52;color:white;padding:18px 24px}
+  header h1{margin:0 0 5px;font-size:24px}
+  header p{margin:0;opacity:.85;font-size:14px}
+  .wrap{display:grid;grid-template-columns:360px 1fr;height:calc(100vh - 82px)}
+  aside{background:white;border-right:1px solid #ddd;overflow:auto;padding:16px}
+  #map{height:100%;min-height:500px}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+  .stat{border:1px solid #ddd;border-radius:10px;padding:10px;background:#fafafa}
+  .stat strong{display:block;font-size:20px}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  button{border:1px solid #ccc;background:white;border-radius:20px;padding:7px 11px;cursor:pointer}
+  button.active{background:#263c52;color:white;border-color:#263c52}
+  .search{width:100%;padding:10px;border:1px solid #ccc;border-radius:9px;margin-bottom:12px}
+  .card{border:1px solid #ddd;border-left:5px solid #607d8b;border-radius:9px;padding:11px;margin-bottom:9px;background:white;cursor:pointer}
+  .card:hover{background:#f7f9fb}
+  .card h3{margin:0 0 6px;font-size:14px}
+  .card p{margin:3px 0;font-size:12px;color:#555}
+  .tag{display:inline-block;font-size:10px;font-weight:bold;padding:3px 7px;border-radius:10px;margin-bottom:5px}
+  .terciario{border-left-color:#1976d2}.terciario .tag{background:#e3f2fd;color:#1565c0}
+  .bla{border-left-color:#ef8c00}.bla .tag{background:#fff3e0;color:#e65100}
+  .epa{border-left-color:#2e9d62}.epa .tag{background:#e8f5e9;color:#2e7d32}
+  .popup h3{margin:0 0 7px}.popup p{margin:5px 0;font-size:13px}
+  .maps{display:inline-block;margin-top:8px;padding:7px 10px;border-radius:7px;background:#263c52;color:#fff;text-decoration:none;font-size:12px}
+  .note{font-size:11px;color:#777;margin-top:12px;line-height:1.4}
+  @media(max-width:800px){
+    .wrap{grid-template-columns:1fr;height:auto}
+    aside{height:auto;max-height:55vh}
+    #map{height:55vh}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mapa Institucional de Sedes</h1>
+  <p>Consulta rápida de sedes, horarios y responsables.</p>
+</header>
+
+<div class="wrap">
+<aside>
+  <div class="stats">
+    <div class="stat"><strong id="countTotal">18</strong>Total cargadas</div>
+    <div class="stat"><strong id="countTer">3</strong>Terciario</div>
+    <div class="stat"><strong id="countBla">15</strong>BLA</div>
+    <div class="stat"><strong>0</strong>EPA</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" data-filter="todos">Todas</button>
+    <button data-filter="terciario">Terciario</button>
+    <button data-filter="bla">BLA</button>
+    <button data-filter="epa">EPA</button>
+  </div>
+
+  <input id="search" class="search" placeholder="Buscar sede o responsable...">
+
+  <div id="list"></div>
+  <div class="note">Los datos que todavía no fueron enviados quedan preparados para completar. Las ubicaciones se buscan automáticamente en el mapa.</div>
+</aside>
+<div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const sedes = [
+ {tipo:"terciario",nombre:'E.E.P. N.º 274 "General José de San Martín"',direccion:"Mendoza 1600, Resistencia, Chaco, Argentina",horario:"14:00 a 20:30 hs",responsable:"A completar"},
+ {tipo:"terciario",nombre:'E.E.S. N.º 75 "Julio Cortázar"',direccion:"Marconi 100, Resistencia, Chaco, Argentina",horario:"18:30 a 23:00 hs",responsable:"A completar"},
+ {tipo:"terciario",nombre:'E.E.P. N.º 518 "Cte. Andresito"',direccion:"Álvarez Jonte y Carlos Tejedor, Resistencia, Chaco, Argentina",horario:"18:30 a 23:00 hs",responsable:"A completar"},
+
+ {tipo:"bla",nombre:"CIC San José Obrero",direccion:"Nicaragua y Fotheringham, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Brosutti Bruno"},
+ {tipo:"bla",nombre:"Sto Domingo",direccion:"Raúl B. Díaz 865, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Sanchez Laura"},
+ {tipo:"bla",nombre:"EEP 242",direccion:"Fortín Loma Negra 1078, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Alvarez Jorgelina"},
+ {tipo:"bla",nombre:"EEP 518",direccion:"Prov. Unidas PC71, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Zibechi Mariana"},
+ {tipo:"bla",nombre:"Ñandejara",direccion:"Capilla S. Gerardo, calle Australia 555, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Altamirano Walter"},
+ {tipo:"bla",nombre:"CIC Los Cisnes",direccion:"Cristofani 1950, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Lencina Claudia"},
+ {tipo:"bla",nombre:"Fundación Cesar Gauto",direccion:"Fortín Rivadavia 4250, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Falchini Glenda"},
+ {tipo:"bla",nombre:"EEP 848 Puerto Vilelas",direccion:"Facundo Quiroga 242, Puerto Vilelas, Chaco, Argentina",horario:"A completar",responsable:"Martinez Yanina"},
+ {tipo:"bla",nombre:"Ciudad Justa",direccion:"Nicaragua 1400, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Lopez Lucila"},
+ {tipo:"bla",nombre:"San José Obrero Capilla",direccion:"Roger Ballet 470, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Barrios Catalino"},
+ {tipo:"bla",nombre:"EEP 785 Juan Moro",direccion:"Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Rivero Diana"},
+ {tipo:"bla",nombre:"EEP 842",direccion:"Castelan 550, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Garro Sebastian"},
+ {tipo:"bla",nombre:"EEP 1031",direccion:"Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Ruiz Diaz Lucas"},
+ {tipo:"bla",nombre:"Luz y Esperanza",direccion:"Padre Distorto y Asunción, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Tourn Yanina (Duarte Nadia)"},
+ {tipo:"bla",nombre:"EEP 969",direccion:"Av. Lavalle y calle 13, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Gandola Claudia"}
+];
+
+const map = L.map('map').setView([-27.4516,-58.9867], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:19,
+  attribution:'© OpenStreetMap'
+}).addTo(map);
+
+const colors={terciario:"#1976d2",bla:"#ef8c00",epa:"#2e9d62"};
+const markers=[];
+let activeFilter="todos";
+
+function mapsUrl(s){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.direccion)}
+
+function popup(s){
+ return `<div class="popup"><h3>${s.nombre}</h3>
+ <p><b>Nivel:</b> ${s.tipo.toUpperCase()}</p>
+ <p><b>Dirección:</b> ${s.direccion}</p>
+ <p><b>Horario:</b> ${s.horario}</p>
+ <p><b>Responsable:</b> ${s.responsable}</p>
+ <a class="maps" target="_blank" href="${mapsUrl(s)}">Abrir en Google Maps</a></div>`;
+}
+
+function renderList(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=document.getElementById("list");
+ list.innerHTML="";
+ sedes.forEach((s,i)=>{
+   const ok=(activeFilter==="todos"||s.tipo===activeFilter) &&
+            (s.nombre.toLowerCase().includes(q)||s.responsable.toLowerCase().includes(q));
+   if(!ok)return;
+   const div=document.createElement("div");
+   div.className="card "+s.tipo;
+   div.innerHTML=`<span class="tag">${s.tipo==="terciario"?"TERCIARIO":s.tipo.toUpperCase()}</span>
+     <h3>${s.nombre}</h3><p>👤 ${s.responsable}</p><p>🕐 ${s.horario}</p>`;
+   div.onclick=()=>focusSede(i);
+   list.appendChild(div);
+ });
+}
+
+function focusSede(i){
+ const m=markers[i];
+ if(m && m.getLatLng){
+   map.setView(m.getLatLng(),16);
+   m.openPopup();
+ }
+}
+
+function addMarker(s,i,lat,lng){
+ const icon=L.divIcon({
+   className:"",
+   html:`<div style="width:18px;height:18px;border-radius:50%;background:${colors[s.tipo]};border:3px solid white;box-shadow:0 1px 5px #555"></div>`,
+   iconSize:[18,18],iconAnchor:[9,9]
+ });
+ const m=L.marker([lat,lng],{icon}).addTo(map).bindPopup(popup(s));
+ markers[i]=m;
+}
+
+// Geocodificación automática de las direcciones. Si alguna no se encuentra,
+// la ficha sigue funcionando y ofrece el botón de Google Maps.
+async function geocodeAll(){
+ for(let i=0;i<sedes.length;i++){
+   const s=sedes[i];
+   if(!s.direccion || s.direccion==="Resistencia, Chaco, Argentina") continue;
+   try{
+     const url="https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ar&q="+encodeURIComponent(s.direccion);
+     const r=await fetch(url);
+     const data=await r.json();
+     if(data.length) addMarker(s,i,parseFloat(data[0].lat),parseFloat(data[0].lon));
+   }catch(e){}
+   await new Promise(r=>setTimeout(r,900));
+ }
+}
+
+document.querySelectorAll(".filters button").forEach(b=>{
+ b.onclick=()=>{
+   document.querySelectorAll(".filters button").forEach(x=>x.classList.remove("active"));
+   b.classList.add("active"); activeFilter=b.dataset.filter; renderList();
+ };
+});
+document.getElementById("search").addEventListener("input",renderList);
+renderList();
+geocodeAll();
+</script>
+</body>
+</html>
