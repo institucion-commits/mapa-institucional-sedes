@@ -27,7 +27,7 @@
   .card p{margin:3px 0;font-size:12px;color:#555}
   .tag{display:inline-block;font-size:10px;font-weight:bold;padding:3px 7px;border-radius:10px;margin-bottom:5px}
   .terciario{border-left-color:#1976d2}.terciario .tag{background:#e3f2fd;color:#1565c0}
-  .bla{border-left-color:#ef8c00}.bla .tag{background:#fff3e0;color:#e65100}.tecnica{border-left-color:#7b4bb7}.tecnica .tag{background:#f0e7fa;color:#63389a}
+  .bla{border-left-color:#D32F2F}.bla .tag{background:#fff3e0;color:#e65100}.fp{border-left-color:#d4a017}.fp .tag{background:#fff7d6;color:#8a6500}.tecnica{border-left-color:#7b4bb7}.tecnica .tag{background:#f0e7fa;color:#63389a}
   .epa{border-left-color:#2e9d62}.tecnica{border-left-color:#7b4bb7}.tecnica .tag{background:#f0e7fa;color:#63389a}.epa .tag{background:#e8f5e9;color:#2e7d32}
   .popup h3{margin:0 0 7px}.popup p{margin:5px 0;font-size:13px}
   .maps{display:inline-block;margin-top:8px;padding:7px 10px;border-radius:7px;background:#263c52;color:#fff;text-decoration:none;font-size:12px}
@@ -48,23 +48,23 @@
 <div class="wrap">
 <aside>
   <div class="stats">
-    <div class="stat"><strong id="countTotal">21</strong>Total cargadas</div>
+    <div class="stat"><strong id="countTotal">30</strong>Total cargadas</div>
     <div class="stat"><strong id="countTer">5</strong>Terciario</div>
     <div class="stat"><strong id="countBla">15</strong>BLA</div>
-    <div class="stat"><strong>0</strong>EPA</div><div class="stat"><strong>1</strong>Sec. Técnica</div>
+    <div class="stat"><strong>0</strong>EPA</div><div class="stat"><strong>1</strong>Sec. Técnica</div><div class="stat"><strong>9</strong>Formación Profesional</div>
   </div>
 
   <div class="filters">
     <button class="active" data-filter="todos">Todas</button>
     <button data-filter="terciario">Terciario</button>
     <button data-filter="bla">BLA</button>
-    <button data-filter="epa">EPA</button><button data-filter="tecnica">Sec. Técnica</button>
+    <button data-filter="epa">EPA</button><button data-filter="tecnica">Sec. Técnica</button><button data-filter="fp">Formación Profesional</button>
   </div>
 
   <input id="search" class="search" placeholder="Buscar sede o responsable...">
 
   <div id="list"></div>
-  <div class="note">Los datos que todavía no fueron enviados quedan preparados para completar. Las sedes con enlace de Google Maps usan su ubicación exacta. Las restantes se completan al incorporar sus datos.</div>
+  <div class="note">Los datos que todavía no fueron enviados quedan preparados para completar. Las sedes con enlace de Google Maps usan su ubicación exacta. Los puntos de sedes compartidas se separan visualmente para que cada nivel pueda verse.</div>
 </aside>
 <div id="map"></div>
 </div>
@@ -76,26 +76,35 @@ const sedes = [
  {tipo:"terciario",nombre:'E.E.S. N.º 75 "Julio Cortázar"',direccion:"Marconi 100, Resistencia, Chaco, Argentina",horario:"18:30 a 23:00 hs",responsable:"Mariana Ruiz Díaz",carreras:["Prof. en Educación Secundaria en Ciencias Políticas — 1.º, 2.º, 3.º y 4.º año","Prof. en Educación Secundaria en Informática — 2.º, 3.º y 4.º año","Prof. en Educación Primaria — 1.º año","Tec. Sup. en Administración de RRHH — 1.º año","Trabajo Social — 4.º año","Tec. Sup. en Auxiliar Docente — 1.º y 2.º año"],lat:-27.4610691,lng:-59.0053475,maps:"https://maps.app.goo.gl/sSSnp9qCvyzAnoKt5"},
  {tipo:"terciario",nombre:'E.E.P. N.º 518 "Cte. Andresito"',direccion:"Entre Álvarez Jonte y Carlos Tejedor, Resistencia, Chaco, Argentina",horario:"18:30 a 23:00 hs",responsable:"Rector / Vicerrector",carreras:["Tec. Sup. en Administración y Gestión de Servicios Públicos y Privados — 1.º, 2.º y 3.º año","Tec. Sup. en Construcción de Obras Civiles — 2.º y 3.º año","Tec. Sup. en Electromecánica — 1.º, 2.º y 3.º año","Tec. Sup. en Frutihortícola — 3.º año","Tec. Sup. en Gestión de Energía Renovable — 3.º año","Tec. Sup. en Instalaciones de Gas — 3.º año","Tec. Sup. en Mantenimiento de Edificios — 3.º año","Tec. Sup. en Seguridad, Higiene y Medio Ambiente en el Trabajo — 1.º año","Tec. Sup. en Tecnología de los Alimentos — 3.º año","Tec. Sup. en Marketing y Publicidad — 1.º, 2.º y 3.º año"],lat:-27.4477799,lng:-59.0155524,maps:"https://maps.app.goo.gl/Bbg5xwj2XMUXPSq28"},
 
+ {tipo:"bla",nombre:"E.E.P. N.º 518 “Cte. Andresito”",direccion:"Prov. Unidas PC71, Resistencia, Chaco, Argentina",horario:"18:30 a 23:00 hs",responsable:"Zibechi Mariana",lat:-27.4477799,lng:-59.0155524,maps:"https://maps.app.goo.gl/Bbg5xwj2XMUXPSq28"},
  {tipo:"bla",nombre:"CIC San José Obrero",direccion:"Nicaragua y Fotheringham, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Brosutti Bruno",lat:-27.4630656,lng:-59.0343107,maps:"https://maps.app.goo.gl/LLurQDhjushNpj2h8"},
- {tipo:"bla",nombre:"Sto Domingo",direccion:"Raúl B. Díaz 865, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Sanchez Laura",lat:-27.4329613,lng:-58.991564,maps:"https://maps.app.goo.gl/3mDEazc8hM6dKhm56"},
- {tipo:"bla",nombre:"EEP 242",direccion:"Fortín Loma Negra 1078, Resistencia, Chaco, Argentina",horario:"18:30 a 21:10 hs",responsable:"Alvarez Jorgelina",lat:-27.4749401,lng:-58.993969,maps:"https://maps.app.goo.gl/jPqpgCMqykXmg3nq7"},
- {tipo:"bla",nombre:"EEP 518",direccion:"Prov. Unidas PC71, Resistencia, Chaco, Argentina",horario:"18:30 a 23:00 hs",responsable:"Zibechi Mariana",lat:-27.4477799,lng:-59.0155524,maps:"https://maps.app.goo.gl/Bbg5xwj2XMUXPSq28"},
- {tipo:"bla",nombre:"Ñandejara",direccion:"Capilla San Gerardo, calle Australia 555, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Altamirano Walter",lat:-27.4388095,lng:-58.9628457,maps:"https://maps.app.goo.gl/RcpFq25AJQCqEMJ29"},
+ {tipo:"bla",nombre:"Santo Domingo",direccion:"Raúl B. Díaz 865, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Sanchez Laura",lat:-27.4329613,lng:-58.991564,maps:"https://maps.app.goo.gl/3mDEazc8hM6dKhm56"},
+ {tipo:"bla",nombre:'E.E.P. N.º 242 “Octavio Sergio Pico”',direccion:"Fortín Loma Negra 1078, Resistencia, Chaco, Argentina",horario:"18:30 a 21:10 hs",responsable:"Alvarez Jorgelina",lat:-27.4749401,lng:-58.993969,maps:"https://maps.app.goo.gl/jPqpgCMqykXmg3nq7"},
+ {tipo:"bla",nombre:"Ñandejara — Capilla San Gerardo",direccion:"Capilla San Gerardo, calle Australia 555, Resistencia, Chaco, Argentina",horario:"14:30 a 17:30 hs",responsable:"Altamirano Walter",lat:-27.4388095,lng:-58.9628457,maps:"https://maps.app.goo.gl/RcpFq25AJQCqEMJ29"},
  {tipo:"bla",nombre:"CIC Los Cisnes",direccion:"Cristofani 1950, Resistencia, Chaco, Argentina",horario:"18:00 a 21:30 hs",responsable:"Lencina Claudia",lat:-27.4535486,lng:-59.0240126,maps:"https://maps.app.goo.gl/oyLvPZrvKyVpRe6y7"},
- {tipo:"bla",nombre:"Fundación Cesar Gauto",direccion:"Fortín Rivadavia 4250, Resistencia, Chaco, Argentina",horario:"A completar",responsable:"Falchini Glenda"},
- {tipo:"bla",nombre:"EEP 848 Puerto Vilelas",direccion:"Facundo Quiroga 242, Puerto Vilelas, Chaco, Argentina",horario:"18:40 a 22:40 hs",responsable:"Martinez Yanina",lat:-27.5076697,lng:-58.9414868,maps:"https://maps.app.goo.gl/LbyVALimCTRaJq7g8"},
+ {tipo:"bla",nombre:"Fundación Cesar Gauto",direccion:"Fortín Rivadavia 4250, Resistencia, Chaco, Argentina",horario:"14:30 a 17:30 hs",responsable:"Falchini Glenda",lat:-27.5006599,lng:-58.9671326,maps:"https://maps.app.goo.gl/hF2eZa5pJAQr6c56A"},
+ {tipo:"bla",nombre:'E.E.P. N.º 848 "Comandante L. Piedrabuena"',direccion:"Facundo Quiroga 242, Puerto Vilelas, Chaco, Argentina",horario:"18:40 a 22:40 hs",responsable:"Martinez Yanina",lat:-27.5076697,lng:-58.9414868,maps:"https://maps.app.goo.gl/LbyVALimCTRaJq7g8"},
  {tipo:"bla",nombre:"Ciudad Justa",direccion:"Nicaragua 1400, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Lopez Lucila",lat:-27.4822283,lng:-58.9963251,maps:"https://maps.app.goo.gl/w7WV7Zx4FmDpPuoY9"},
- {tipo:"bla",nombre:"San José Obrero Capilla",direccion:"Roger Ballet 470, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Barrios Catalino",lat:-27.4785864,lng:-58.9636763,maps:"https://maps.app.goo.gl/VsBx9zeu9teLwqYH7"},
- {tipo:"bla",nombre:"EEP 785 Juan Moro",direccion:"Resistencia, Chaco, Argentina",horario:"18:30 a 22:30 hs",responsable:"Rivero Diana",lat:-27.491653,lng:-58.951869,maps:"https://maps.app.goo.gl/njBnceXRZCuc5ZVU7"},
- {tipo:"bla",nombre:"EEP 842",direccion:"Castelan 550, Resistencia, Chaco, Argentina",horario:"18:30 a 22:00 hs",responsable:"Garro Sebastian",lat:-27.4789248,lng:-58.9667775,maps:"https://maps.app.goo.gl/NfaGtCURtXnRGZLy5"},
- {tipo:"bla",nombre:"EEP 1031",direccion:"Resistencia, Chaco, Argentina",horario:"18:30 a 22:00 hs",responsable:"Ruiz Diaz Lucas",lat:-27.416822,lng:-59.0484943,maps:"https://maps.app.goo.gl/zaGtTPtzUTEkoDRb8"},
- {tipo:"bla",nombre:"Luz y Esperanza",direccion:"Padre Distorto y Asunción, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Tourn Yanina (Duarte Nadia)",lat:-27.4484506,lng:-58.9643664,maps:"https://maps.app.goo.gl/ozQuF61oX9kVnUZJA"},
- {tipo:"bla",nombre:"EEP 969",direccion:"Av. Lavalle y calle 13, Resistencia, Chaco, Argentina",horario:"18:30 a 21:30 hs",responsable:"Gandola Claudia",lat:-27.4280634,lng:-58.9978414,maps:"https://maps.app.goo.gl/ojGvjrxftvdJpMbZ6"},
+ {tipo:"bla",nombre:"Capilla San José Obrero",direccion:"Roger Ballet 470, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Barrios Catalino",lat:-27.4785864,lng:-58.9636763,maps:"https://maps.app.goo.gl/VsBx9zeu9teLwqYH7"},
+ {tipo:"bla",nombre:'E.E.P. N.º 785 "Juan Moro"',direccion:"Resistencia, Chaco, Argentina",horario:"18:30 a 22:30 hs",responsable:"Rivero Diana",lat:-27.491653,lng:-58.951869,maps:"https://maps.app.goo.gl/njBnceXRZCuc5ZVU7"},
+ {tipo:"bla",nombre:'E.E.P. N.º 842 "Rita Agote de Susiatia"',direccion:"Castelan 550, Resistencia, Chaco, Argentina",horario:"18:30 a 22:00 hs",responsable:"Garro Sebastian",lat:-27.4789248,lng:-58.9667775,maps:"https://maps.app.goo.gl/NfaGtCURtXnRGZLy5"},
+ {tipo:"bla",nombre:'E.E.P. N.º 1031 "Aledo Luis Meloni"',direccion:"Resistencia, Chaco, Argentina",horario:"18:30 a 22:00 hs",responsable:"Ruiz Diaz Lucas",lat:-27.416822,lng:-59.0484943,maps:"https://maps.app.goo.gl/zaGtTPtzUTEkoDRb8"},
+ {tipo:"bla",nombre:'E.E.P. N.º 969 "Maestro Rodolfo Alfredo Di Nubila"',direccion:"Av. Lavalle y calle 13, Resistencia, Chaco, Argentina",horario:"18:30 a 21:30 hs",responsable:"Gandola Claudia",lat:-27.4280634,lng:-58.9978414,maps:"https://maps.app.goo.gl/ojGvjrxftvdJpMbZ6"},
+ {tipo:"bla",nombre:"Ministerio Luz y Esperanza",direccion:"Padre Distorto y Asunción, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Tourn Yanina (Duarte Nadia)",lat:-27.4484506,lng:-58.9643664,maps:"https://maps.app.goo.gl/ozQuF61oX9kVnUZJA"},
 
  {tipo:"terciario",nombre:"Nac Punto Digital — San Martín y Pasteur",direccion:"San Martín y Pasteur, Villa Ángela, Chaco, Argentina",horario:"19:30 a 23:50 hs",responsable:"A completar",carreras:["Prof. en Informática — 2.º año","Tecnicatura en Marketing y Publicidad — 1.º año"],lat:-27.57741,lng:-60.7106246,maps:"https://maps.app.goo.gl/UmFmczKCqTubayNu6"},
  {tipo:"terciario",nombre:"Terminal de Ómnibus — Salones de arriba",direccion:"Av. John Kennedy 880, Villa Ángela, Chaco, Argentina",horario:"19:30 a 23:50 hs",responsable:"A completar",carreras:["Trabajo Social — 4.º año","Tec. en Electromecánica — 3.º año","Tec. Sup. en Administración y Gestión de Servicios Públicos y Privados — 1.º año","Tec. en Construcción de Obras Civiles — 2.º año"],lat:-27.5694295,lng:-60.7232531,maps:"https://maps.app.goo.gl/sL5eGam5Eqj88Zu67"},
+ {tipo:"tecnica",nombre:'E.E.P. N.º 423 "Yebrail Matta"',direccion:"Frondizi 1535, Resistencia, Chaco, Argentina",horario:"18:30 a 22:30 hs",responsable:"Priscila Blanco",lat:-27.4643167,lng:-58.9990982,maps:"https://maps.app.goo.gl/igmSNyvTUv5EH7Fv8"},
 
- {tipo:"tecnica",nombre:'E.E.P. N.º 423 "Yebrail Matta"',direccion:"Resistencia, Chaco, Argentina",horario:"18:30 a 22:30 hs",responsable:"Priscila Blanco",lat:-27.4643167,lng:-58.9990982,maps:"https://maps.app.goo.gl/igmSNyvTUv5EH7Fv8"}
+ {tipo:"fp",nombre:"AC 16 DE SEPTIEMBRE",direccion:"Alfonsina Storni 1990, Resistencia, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Lopez Milton",cursos:["Plomería","Albañilería"],lat:-27.4633116,lng:-58.9488084,maps:"https://maps.app.goo.gl/WqK3xDtHzW6Stxaw9"},
+ {tipo:"fp",nombre:"BIBLIOTECA VEIRAVÉ",direccion:"Barrio San Cayetano, entre calle San Bernardo y Virgen del Valle, Mz 34 Pc 3, Resistencia, Chaco",horario:"14:00 a 18:00 hs",responsable:"Lopez Milton",cursos:["Auxiliar Contable","Reparador de Celulares","Operador de Informática"],lat:-27.4592677,lng:-59.0118019,maps:"https://maps.app.goo.gl/a7P69uyZcWNHEi5x6"},
+ {tipo:"fp",nombre:"CENTRO MUJER BETTINA VAZQUEZ",direccion:"M17 Parcela 3, Barrio Santa Inés, Resistencia, Chaco",horario:"08:30 a 12:30 hs y 15:00 a 21:30 hs",responsable:"Lopez Milton",cursos:["Auxiliar Jurídico","Auxiliar en Farmacia","Lengua de Señas Argentina","Operador en Informática","Ceremonial y Protocolo","Peluquería y Barbería"],lat:-27.4578404,lng:-59.0208432,maps:"https://maps.app.goo.gl/AwtoyGCPgnq4gDB57"},
+ {tipo:"fp",nombre:'E.E.P. N.º 518 "Cte. Andresito"',direccion:"Entre Álvarez Jonte y Carlos Tejedor, Resistencia, Chaco, Argentina",horario:"14:00 a 20:00 hs",responsable:"Lopez Milton",cursos:["Gasista Domiciliario","Auxiliar Jurídico","Refrigeración y Aire Acondicionado","Reparador de Electrodomésticos"],lat:-27.4477799,lng:-59.0155524,maps:"https://maps.app.goo.gl/Bbg5xwj2XMUXPSq28"},
+ {tipo:"fp",nombre:'MERENDERO "DIOS ES FIEL"',direccion:"Cardenal 3671, Resistencia, Chaco, Argentina",horario:"16:00 a 18:00 hs",responsable:"Lopez Milton",cursos:["Huerta Agroecológica"],lat:-27.4773113,lng:-58.9503119,maps:"https://maps.app.goo.gl/gMeuJHjcunfUzUf27"},
+ {tipo:"fp",nombre:"Pueyrredón 840",direccion:"Pueyrredón 840, Resistencia, Chaco, Argentina",horario:"14:00 a 19:00 hs",responsable:"Lopez Milton",cursos:["Peluquería Canina"],lat:-27.4430121,lng:-58.9806314,maps:"https://maps.app.goo.gl/2B19Nc51HbwEtQrJ9"},
+ {tipo:"fp",nombre:"Santo Domingo",direccion:"Raúl B. Díaz 865, Resistencia, Chaco, Argentina",horario:"15:00 a 19:00 hs",responsable:"Lopez Milton",cursos:["Productor de Plantas en Vivero","Modista","Electricista Domiciliario"],lat:-27.4329613,lng:-58.991564,maps:"https://maps.app.goo.gl/3mDEazc8hM6dKhm56"},
+ {tipo:"fp",nombre:"VICENTE LOPEZ VICUÑA",direccion:"García Tomás 1154, Resistencia, Chaco, Argentina",horario:"13:30 a 17:30 hs",responsable:"Lopez Milton",cursos:["Panadería"],lat:-27.4569635,lng:-59.0148146,maps:"https://maps.app.goo.gl/CpBf3EzrHou2ykWz9"},
+ {tipo:"fp",nombre:'E.E.P. N.º 423 "Yebrail Matta"',direccion:"Frondizi 1535, Resistencia, Chaco, Argentina",horario:"18:30 a 21:30 hs",responsable:"Lopez Milton",cursos:["Operador en Adicciones"],lat:-27.4643167,lng:-58.9990982,maps:"https://maps.app.goo.gl/igmSNyvTUv5EH7Fv8"}
 ];
 
 const map = L.map('map').setView([-27.4516,-58.9867], 12);
@@ -104,7 +113,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   attribution:'© OpenStreetMap'
 }).addTo(map);
 
-const colors={terciario:"#1976d2",bla:"#ef8c00",epa:"#2e9d62",tecnica:"#7b4bb7"};
+const colors={terciario:"#1976d2",bla:"#D32F2F",epa:"#2e9d62",tecnica:"#7b4bb7",fp:"#d4a017"};
 const markers=[];
 let activeFilter="todos";
 
@@ -116,7 +125,7 @@ function popup(s){
  return `<div class="popup"><h3>${s.nombre}</h3>
  <p><b>Nivel:</b> ${s.tipo==="tecnica" ? "SECUNDARIA TÉCNICA" : s.tipo.toUpperCase()}</p>
  <p><b>Dirección:</b> ${s.direccion}</p><p><b>Horario:</b> ${s.horario}</p>
- <p><b>Responsable:</b> ${s.responsable}</p>${careers}
+ <p><b>Responsable:</b> ${s.responsable}</p>${careers}<p><b>Cursos:</b> ${s.cursos ? s.cursos.join(", ") : "—"}</p>
  <a class="maps" target="_blank" href="${mapsUrl(s)}">Abrir en Google Maps</a></div>`;
 }
 
@@ -130,8 +139,8 @@ function renderList(){
    if(!ok)return;
    const div=document.createElement("div");
    div.className="card "+s.tipo;
-   div.innerHTML=`<span class="tag">${s.tipo==="terciario"?"TERCIARIO":s.tipo.toUpperCase()}</span>
-     <h3>${s.nombre}</h3><p>👤 ${s.responsable}</p><p>🕐 ${s.horario}</p>`;
+   div.innerHTML=`<span class="tag">${s.tipo==="terciario"?"TERCIARIO":s.tipo==="fp"?"FORMACIÓN PROFESIONAL":s.tipo==="tecnica"?"SECUNDARIA TÉCNICA":s.tipo.toUpperCase()}</span>
+     <h3>${s.nombre}</h3><p>👤 ${s.responsable}</p><p>🕐 ${s.horario}</p>${s.cursos?`<p>🎓 ${s.cursos.length} curso(s)</p>`:""}`;
    div.onclick=()=>focusSede(i);
    list.appendChild(div);
  });
@@ -146,12 +155,27 @@ function focusSede(i){
 }
 
 function addMarker(s,i,lat,lng){
+ // Si varias instituciones comparten la misma sede, separamos los círculos
+ // unos pocos píxeles alrededor del mismo punto para que todos sean visibles.
+ const same = sedes.map((x,idx)=>({x,idx})).filter(o =>
+   o.x.lat && o.x.lng &&
+   Math.abs(o.x.lat-lat) < 0.00001 &&
+   Math.abs(o.x.lng-lng) < 0.00001
+ );
+ const pos = same.findIndex(o=>o.idx===i);
+ let displayLat=lat, displayLng=lng;
+ if(same.length>1){
+   const radius=0.00014;
+   const angle=(2*Math.PI*pos/same.length) - Math.PI/2;
+   displayLat=lat + radius*Math.sin(angle);
+   displayLng=lng + radius*Math.cos(angle)/Math.max(Math.cos(lat*Math.PI/180),0.1);
+ }
  const icon=L.divIcon({
    className:"",
    html:`<div style="width:18px;height:18px;border-radius:50%;background:${colors[s.tipo]};border:3px solid white;box-shadow:0 1px 5px #555"></div>`,
    iconSize:[18,18],iconAnchor:[9,9]
  });
- const m=L.marker([lat,lng],{icon}).addTo(map).bindPopup(popup(s));
+ const m=L.marker([displayLat,displayLng],{icon}).addTo(map).bindPopup(popup(s));
  markers[i]=m;
 }
 
