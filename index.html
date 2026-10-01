@@ -37,6 +37,7 @@
     aside{height:auto;max-height:55vh}
     #map{height:55vh}
   }
+.administrativa{border-left-color:#607d8b}.administrativa .tag{background:#eceff1;color:#455a64}
 </style>
 </head>
 <body>
@@ -48,17 +49,17 @@
 <div class="wrap">
 <aside>
   <div class="stats">
-    <div class="stat"><strong id="countTotal">30</strong>Total cargadas</div>
-    <div class="stat"><strong id="countTer">5</strong>Terciario</div>
-    <div class="stat"><strong id="countBla">15</strong>BLA</div>
-    <div class="stat"><strong>0</strong>EPA</div><div class="stat"><strong>1</strong>Sec. Técnica</div><div class="stat"><strong>9</strong>Formación Profesional</div>
+    <div class="stat"><strong id="countTotal">36</strong>Total cargadas</div>
+    <div class="stat"><strong id="countTer">6</strong>Terciario</div>
+    <div class="stat"><strong id="countBla">17</strong>BLA</div>
+    <div class="stat"><strong>2</strong>EPA</div><div class="stat"><strong>1</strong>Sec. Técnica</div><div class="stat"><strong>9</strong>Formación Profesional</div><div class="stat"><strong>1</strong>Administrativa</div>
   </div>
 
   <div class="filters">
     <button class="active" data-filter="todos">Todas</button>
     <button data-filter="terciario">Terciario</button>
     <button data-filter="bla">BLA</button>
-    <button data-filter="epa">EPA</button><button data-filter="tecnica">Sec. Técnica</button><button data-filter="fp">Formación Profesional</button>
+    <button data-filter="epa">EPA</button><button data-filter="tecnica">Sec. Técnica</button><button data-filter="fp">Formación Profesional</button><button data-filter="administrativa">Administrativa</button>
   </div>
 
   <input id="search" class="search" placeholder="Buscar sede o responsable...">
@@ -104,7 +105,14 @@ const sedes = [
  {tipo:"fp",nombre:"Pueyrredón 840",direccion:"Pueyrredón 840, Resistencia, Chaco, Argentina",horario:"14:00 a 19:00 hs",responsable:"Lopez Milton",cursos:["Peluquería Canina"],lat:-27.4430121,lng:-58.9806314,maps:"https://maps.app.goo.gl/2B19Nc51HbwEtQrJ9"},
  {tipo:"fp",nombre:"Santo Domingo",direccion:"Raúl B. Díaz 865, Resistencia, Chaco, Argentina",horario:"15:00 a 19:00 hs",responsable:"Lopez Milton",cursos:["Productor de Plantas en Vivero","Modista","Electricista Domiciliario"],lat:-27.4329613,lng:-58.991564,maps:"https://maps.app.goo.gl/3mDEazc8hM6dKhm56"},
  {tipo:"fp",nombre:"VICENTE LOPEZ VICUÑA",direccion:"García Tomás 1154, Resistencia, Chaco, Argentina",horario:"13:30 a 17:30 hs",responsable:"Lopez Milton",cursos:["Panadería"],lat:-27.4569635,lng:-59.0148146,maps:"https://maps.app.goo.gl/CpBf3EzrHou2ykWz9"},
- {tipo:"fp",nombre:'E.E.P. N.º 423 "Yebrail Matta"',direccion:"Frondizi 1535, Resistencia, Chaco, Argentina",horario:"18:30 a 21:30 hs",responsable:"Lopez Milton",cursos:["Operador en Adicciones"],lat:-27.4643167,lng:-58.9990982,maps:"https://maps.app.goo.gl/igmSNyvTUv5EH7Fv8"}
+ {tipo:"fp",nombre:'E.E.P. N.º 423 "Yebrail Matta"',direccion:"Frondizi 1535, Resistencia, Chaco, Argentina",horario:"18:30 a 21:30 hs",responsable:"Lopez Milton",cursos:["Operador en Adicciones"],lat:-27.4643167,lng:-58.9990982,maps:"https://maps.app.goo.gl/igmSNyvTUv5EH7Fv8"},
+
+ {tipo:"terciario",nombre:'E.E.P. N.º 747 "Soldado Félix Aguirre" — Machagai',direccion:"Teodolinda Ermacora 1100, Machagai, Chaco, Argentina",horario:"19:00 a 23:05 hs",responsable:"Nadia Salomon",carreras:["Tecnicatura Superior en Enfermería — cohorte 2025","Tecnicatura Superior en Producción Frutihortícola — cohorte 2024","Profesorado de Educación Secundaria en Ciencias Políticas — cohortes 2024 y 2025","Profesorado de Educación Secundaria en Informática — cohorte 2023"],lat:-26.920391,lng:-60.0616199,maps:"https://maps.app.goo.gl/GspkxyvBJH2FsnUDA"},
+ {tipo:"bla",nombre:'E.E.P. N.º 747 "Soldado Félix Aguirre" — Machagai',direccion:"Teodolinda Ermacora 1100, Machagai, Chaco, Argentina",horario:"19:00 a 23:05 hs",responsable:"Nadia Salomon",lat:-26.920391,lng:-60.0616199,maps:"https://maps.app.goo.gl/GspkxyvBJH2FsnUDA"},
+ {tipo:"epa",nombre:'E.E.P. N.º 747 "Soldado Félix Aguirre" — Machagai',direccion:"Teodolinda Ermacora 1100, Machagai, Chaco, Argentina",horario:"19:00 a 23:05 hs",responsable:"Nadia Salomon",carreras:["Educación Primaria para Adultos"],lat:-26.920391,lng:-60.0616199,maps:"https://maps.app.goo.gl/GspkxyvBJH2FsnUDA"},
+ {tipo:"epa",nombre:"Centro Integrador Comunitario — Machagai",direccion:"Reconquista y Las Heras, Machagai, Chaco, Argentina",horario:"14:00 a 17:30 hs",responsable:"Nadia Salomon",carreras:["Educación Primaria para Adultos"],lat:-26.9179503,lng:-60.0547619,maps:"https://maps.app.goo.gl/RcxpudvMHbqiRrAB8"},
+ {tipo:"bla",nombre:"SUOEM — Sindicato de Trabajadores Municipales — Machagai",direccion:"Pueyrredón entre 9 de Julio y Dante Tardelli, Machagai, Chaco, Argentina",horario:"14:00 a 18:00 hs",responsable:"Nadia Salomon",lat:-26.9297633,lng:-60.0448069,maps:"https://maps.app.goo.gl/rvJBewU31bNdzYDD7"},
+ {tipo:"administrativa",nombre:"Oficina Administrativa",direccion:"Juan Domingo Perón 975, Resistencia, Chaco, Argentina",horario:"08:00 a 12:30 hs y 16:00 a 20:30 hs",responsable:"Pérez Martín Alejandro (TM) y Guanez Cristian (TT)",carreras:["Tareas administrativas, ejecutivas, legales y contables"],lat:-27.4451007,lng:-58.9970081,maps:"https://maps.app.goo.gl/vc4hWiMDaGsZAWtDA"}
 ];
 
 const map = L.map('map').setView([-27.4516,-58.9867], 12);
@@ -113,7 +121,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   attribution:'© OpenStreetMap'
 }).addTo(map);
 
-const colors={terciario:"#1976d2",bla:"#D32F2F",epa:"#2e9d62",tecnica:"#7b4bb7",fp:"#d4a017"};
+const colors={terciario:"#1976d2",bla:"#D32F2F",epa:"#2e9d62",tecnica:"#7b4bb7",fp:"#d4a017",administrativa:"#607d8b"};
 const markers=[];
 let activeFilter="todos";
 
@@ -123,9 +131,9 @@ function popup(s){
  const careers = s.carreras && s.carreras.length
    ? `<p><b>Carreras:</b></p><ul style="padding-left:18px;margin:4px 0 8px">${s.carreras.map(c=>`<li style="margin:3px 0">${c}</li>`).join("")}</ul>` : "";
  return `<div class="popup"><h3>${s.nombre}</h3>
- <p><b>Nivel:</b> ${s.tipo==="tecnica" ? "SECUNDARIA TÉCNICA" : s.tipo.toUpperCase()}</p>
+ <p><b>Nivel:</b> ${s.tipo==="tecnica" ? "SECUNDARIA TÉCNICA" : s.tipo==="bla" ? "EDUCACIÓN SECUNDARIA PARA ADULTOS" : s.tipo==="epa" ? "EDUCACIÓN PRIMARIA PARA ADULTOS" : s.tipo==="administrativa" ? "SEDE ADMINISTRATIVA" : s.tipo==="fp" ? "FORMACIÓN PROFESIONAL" : "TERCIARIO"}</p>
  <p><b>Dirección:</b> ${s.direccion}</p><p><b>Horario:</b> ${s.horario}</p>
- <p><b>Responsable:</b> ${s.responsable}</p>${careers}<p><b>Cursos:</b> ${s.cursos ? s.cursos.join(", ") : "—"}</p>
+ <p><b>Responsable:</b> ${s.responsable}</p>${careers}<p><b>${s.tipo==="bla" ? "Modalidad" : s.tipo==="epa" ? "Modalidad" : s.tipo==="administrativa" ? "Funciones" : "Cursos"}:</b> ${s.tipo==="bla" ? "Educación Secundaria para Adultos" : s.tipo==="epa" ? "Educación Primaria para Adultos" : s.cursos ? s.cursos.join(", ") : s.tipo==="administrativa" ? "Tareas administrativas, ejecutivas, legales y contables" : "—"}</p>
  <a class="maps" target="_blank" href="${mapsUrl(s)}">Abrir en Google Maps</a></div>`;
 }
 
@@ -139,8 +147,8 @@ function renderList(){
    if(!ok)return;
    const div=document.createElement("div");
    div.className="card "+s.tipo;
-   div.innerHTML=`<span class="tag">${s.tipo==="terciario"?"TERCIARIO":s.tipo==="fp"?"FORMACIÓN PROFESIONAL":s.tipo==="tecnica"?"SECUNDARIA TÉCNICA":s.tipo.toUpperCase()}</span>
-     <h3>${s.nombre}</h3><p>👤 ${s.responsable}</p><p>🕐 ${s.horario}</p>${s.cursos?`<p>🎓 ${s.cursos.length} curso(s)</p>`:""}`;
+   div.innerHTML=`<span class="tag">${s.tipo==="terciario"?"TERCIARIO":s.tipo==="fp"?"FORMACIÓN PROFESIONAL":s.tipo==="tecnica"?"SECUNDARIA TÉCNICA":s.tipo==="bla"?"BLA — EDUCACIÓN SECUNDARIA PARA ADULTOS":s.tipo==="epa"?"EPA — EDUCACIÓN PRIMARIA PARA ADULTOS":s.tipo==="administrativa"?"SEDE ADMINISTRATIVA":s.tipo.toUpperCase()}</span>
+     <h3>${s.nombre}</h3><p>👤 ${s.responsable}</p><p>🕐 ${s.horario}</p>${s.tipo==="fp" && s.cursos?`<p>🎓 ${s.cursos.length} curso(s)</p>`:s.tipo==="administrativa"?`<p>📋 Tareas administrativas, ejecutivas, legales y contables</p>`:""}`;
    div.onclick=()=>focusSede(i);
    list.appendChild(div);
  });
