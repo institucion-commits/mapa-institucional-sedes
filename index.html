@@ -115,52 +115,15 @@ const sedes = [
  {tipo:"administrativa",nombre:"Oficina Administrativa",direccion:"Juan Domingo Perón 975, Resistencia, Chaco, Argentina",horario:"08:00 a 12:30 hs y 16:00 a 20:30 hs",responsable:"Pérez Martín Alejandro (TM) y Guanez Cristian (TT)",carreras:["Tareas administrativas, ejecutivas, legales y contables"],lat:-27.4451007,lng:-58.9970081,maps:"https://maps.app.goo.gl/vc4hWiMDaGsZAWtDA"}
 ];
 
-const map = L.map('map').setView([-27.4516,-58.9867], 12);
-// Capa base del mapa. Se usa el servidor oficial de OpenStreetMap
-// y, si la vista previa no puede acceder a sus mosaicos, se cambia
-// automáticamente a una segunda fuente pública.
-const baseLayers = [
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-    subdomains:'abcd',
-    maxZoom:20,
-    attribution:'© OpenStreetMap contributors © CARTO'
-  }),
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    subdomains:'abc',
-    maxZoom:19,
-    attribution:'© OpenStreetMap contributors'
-  }),
-  L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png',{
-    maxZoom:18,
-    attribution:'© OpenStreetMap contributors'
-  })
-];
 
-let capaActual = 0;
-let capaConCarga = false;
+const map = L.map('map').setView([-27.4516, -58.9867], 12);
 
-function activarCapaBase(indice){
-  if(indice >= baseLayers.length) return;
-  capaActual = indice;
-  const capa = baseLayers[indice];
+// Capa base de OpenStreetMap
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-  capa.on('load', function(){
-    capaConCarga = true;
-  });
-
-  let errores = 0;
-  capa.on('tileerror', function(){
-    errores++;
-    if(!capaConCarga && errores >= 2 && map.hasLayer(capa)){
-      map.removeLayer(capa);
-      activarCapaBase(indice + 1);
-    }
-  });
-
-  capa.addTo(map);
-}
-
-activarCapaBase(0);
 
 const colors={terciario:"#1976d2",bla:"#D32F2F",epa:"#2e9d62",tecnica:"#7b4bb7",fp:"#d4a017",administrativa:"#607d8b"};
 const markers=[];
